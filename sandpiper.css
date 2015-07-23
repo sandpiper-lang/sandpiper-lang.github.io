@@ -1,0 +1,17 @@
+
+body {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+.container {
+    max-width: 750px;
+}
+
+.jumbotron h1 {
+    font-size: 48px;
+}
+
+.jumbotron small {
+    white-space: nowrap;
+}

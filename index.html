@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>The Sandpiper Programming Language</title>
+        
+        <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="/sandpiper.css" rel="stylesheet">
+        
+        
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        
+        
+    </head>
+    <body>
+        
+        <div class="container">
+        
+            <div class="jumbotron">
+                <h1>Sandpiper <small>Programming Language</small></h1>
+                <p class="lead">
+                    Functional, Objective, Declarative, <strong>Readable.</strong>
+                </p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    
+                    <pre>
+birds => Bird: fetch-all!
+pluralized-r-birds => birds:
+    filter [ %: name: contains? /r/i ]:  ;; Birds with ‘r’ in the name
+    map [ bird ->
+        lower-name => bird: name: downcase.
+        “(lower-name)s”.
+    ].
+
+name-seq => pluralized-r-birds: shuffle: join-using “ and ”.
+Stdout: puts “I love (name-seq).” !
+                    </pre>
+                    
+                    <samp>I love ravens and sparrows and robins and sandpipers.</samp>
+                    
+                </div>
+            </div>
+        
+        </div>
+        
+    </body>
+</html>
