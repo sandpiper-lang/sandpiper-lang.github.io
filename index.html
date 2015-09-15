@@ -8,7 +8,9 @@
         
         <title>The Sandpiper Programming Language</title>
         
-        <link href="/sandpiper.css" rel="stylesheet">
+        <link href="/typography/typography.css" rel="stylesheet">
+        <link href="/style/sandpiper.css" rel="stylesheet">
+        <link href="/style/mainpage.css" rel="stylesheet">
         
         
     </head>
@@ -16,33 +18,18 @@
         
         <div class="container">
         
-            <div class="jumbotron">
-                <h1>Sandpiper <small>Programming Language</small></h1>
-                <p class="lead">
-                    Functional, Objective, Declarative, <strong>Readable.</strong>
-                </p>
-            </div>
+            <header>
+                <h1>Sandpiper <small>Programming&nbsp;Language</small></h1>
+                <article class="byline">Functional, Objective, Declarative, <strong>Readable.</strong></article>
+            </header>
             
-            <div class="row">
-                <div class="col-lg-6">
-                    
-                    <pre>
-birds => Bird: fetch-all!
-pluralized-r-birds => birds:
-    filter [ %: name: contains? /r/i ]:  ;; Birds with ‘r’ in the name
-    map [ bird ->
-        lower-name => bird: name: downcase.
-        “(lower-name)s”.
-    ].
-
-name-seq => pluralized-r-birds: shuffle: join-using “ and ”.
-Stdout: puts “I love (name-seq).” !
-                    </pre>
-                    
-                    <samp>I love ravens and sparrows and robins and sandpipers.</samp>
-                    
-                </div>
-            </div>
+            <nav>
+                <a href="/" class="selected"><div>Home</div></a>
+                <a href="#"><div>Language Description</div></a>
+                <a href="#"><div>Language Reference</div></a>
+                <a href="#"><div>Library Reference</div></a>
+                <a href="#"><div>Makers of Sandpiper</div></a>
+            </nav>
         
         </div>
         

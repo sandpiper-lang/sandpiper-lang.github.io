@@ -1,0 +1,44 @@
+
+body {
+    padding: 3rem 1rem;
+    background-color: rgb(240, 240, 245);
+}
+
+.container {
+    max-width: 900px;
+    margin: 3rem auto;
+}
+
+.jumbotron h1 {
+    font-size: 48px;
+}
+
+.jumbotron small {
+    white-space: nowrap;
+}
+
+nav {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+    border-top: 1px solid rgba(0, 0, 0, 0.6);
+    padding: 0.25em 1em;
+    
+    display: -webkit-flex;
+    -webkit-flex-flow: row wrap;
+    -webkit-justify-content: space-around;
+    -webkit-align-items: baseline;
+    -webkit-align-content: stretch;
+    
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    align-items: baseline;
+    align-content: stretch;
+    
+}
+
+nav > * {
+    -webkit-flex: 0 1 auto;
+    
+    flex: 0 1 auto;
+    padding: 0.25em 1em;
+}
