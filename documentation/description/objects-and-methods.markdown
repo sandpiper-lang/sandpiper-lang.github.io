@@ -49,3 +49,15 @@ You can nest expressions, just as you’d expect:
 which outputs “hoge fuga piyo”. Natch!
 
 </article>
+
+
+<article>
+#### Method Chaining
+
+You can fairly intuitively chain method calls together. Instead of doing `replace/with/`, we could do
+
+    “hoge, fuga, piyo”: split “, ”: join “ ”
+
+This splits the “hoge, fuga, piyo” string, which returns a list of the components; on that list we then call `join` which puts the elements back together into one string, with a single space separating them.
+
+</article>
