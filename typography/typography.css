@@ -11,11 +11,31 @@
 
 body {
     font-family: "Helvetica Neue", Helvetica, sans-serif;
+    line-height: 1.5;
 }
 
 code, pre, samp {
     font-family: hasklig, 'Source Code Pro', Menlo, Inconsolata, sans-serif;
 }
+
+/* “block” code segments: */
+pre {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.7em;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.7em;
+    overflow: auto;
+}
+
+/* “inline” code segments: */
+*:not(pre) > code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.2em;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 0.2em;
+}
+
+
 
 
 a {
