@@ -16,6 +16,7 @@ body {
 
 code, pre, samp {
     font-family: hasklig, 'Source Code Pro', Menlo, Inconsolata, sans-serif;
+    font-size: 93%;
 }
 
 /* “block” code segments: */

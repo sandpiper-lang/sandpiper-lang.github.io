@@ -26,17 +26,17 @@
             <nav>
                 <a href="/" class="selected"><div>Home</div></a>
                 <a href="/documentation/description"><div>Language Description</div></a>
-                <a href="/documentation/reference"><div>Language Reference</div></a>
+                <!-- <a href="/documentation/reference"><div>Language Reference</div></a> -->
                 <a href="/documentation/reference/library"><div>Library Reference</div></a>
                 <a href="/contact"><div>Makers of Sandpiper</div></a>
             </nav>
             
             
-            
-            <article id="elevator-pitch">
-                <p>Sandpiper is an exciting new programming language geared toward writing beautiful, readable code. Here’s what it looks like:</p>
+            <main>
+                <article id="elevator-pitch">
+                    <p>Sandpiper is an exciting new programming language geared toward writing beautiful, readable code. Here’s what it looks like:</p>
 
-                <pre><code>birds =&gt; Bird: fetch-all!
+                    <pre><code>birds =&gt; Bird: fetch-all!
 pluralized-r-birds =&gt; birds:
     filter [ %: name: contains? /r/i ]:  ;; Birds with ‘r’ in the name
     map [ bird -&gt;
@@ -47,17 +47,18 @@ pluralized-r-birds =&gt; birds:
 name-seq =&gt; pluralized-r-birds: shuffle: join-using “ and ”.
 Stdout: puts “I love (name-seq).” !</code></pre>
 
-                <p>In this sample (which, depending on our database, might output “I love ravens and sparrows and robins and sandpipers.”) we see:</p>
+                    <p>In this sample (which, depending on our database, might output “I love ravens and sparrows and robins and sandpipers.”) we see:</p>
 
-                <ul>
-                <li>A natural, object-oriented syntax inspired by Smalltalk</li>
-                <li>A functional-first language, with immutable variables, and methods that cause side-effects clearly marked with a “<code>!</code>”</li>
-                <li>Easy-to-read, easy-to-write method chaining using the <code>:</code> symbol.</li>
-                </ul>
+                    <ul>
+                    <li>A natural, object-oriented syntax inspired by Smalltalk</li>
+                    <li>A functional-first language, with immutable variables, and methods that cause side-effects clearly marked with a “<code>!</code>”</li>
+                    <li>Easy-to-read, easy-to-write method chaining using the <code>:</code> symbol.</li>
+                    </ul>
                 
-                <p>Intrigued? Check out the <a href="/documentation/description">Language Description</a>!</p>
+                    <p>Intrigued? Check out the <a href="/documentation/description">Language Description</a>!</p>
                 
-            </article>
+                </article>
+            </main>
             
             
         
