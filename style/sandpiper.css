@@ -1,5 +1,6 @@
 
 body {
+    margin: 0;
     padding: 3rem 1rem;
     background-color: rgb(240, 240, 245);
 }
@@ -12,11 +13,26 @@ body {
 .container > * {
     padding-left: 3rem;
     padding-right: 3rem;
+    transition: padding 0.75s ease-in-out;
 }
 
 .container > .wide, .container > nav, #sosumi {
     padding-left: unset;
     padding-right: unset;
+}
+
+@media screen and (max-width: 700px) {
+    .container > * {
+        /* This animates down when you resize the browser
+           and looks REALLY FUCKING AWESOME.*/
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    header {
+        font-size: 100%;
+    }
+    
 }
 
 .jumbotron h1 {
@@ -28,8 +44,8 @@ body {
 }
 
 nav {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.6);
-    border-top: 1px solid rgba(0, 0, 0, 0.6);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
     padding: 0.25em 1em;
     margin-bottom: 5rem;
     
