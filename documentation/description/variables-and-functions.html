@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        
+        <title>Language Description: 2. Variables and Functions (The Sandpiper Programming Language)</title>
+        
+        <link href="/typography/typography.css" rel="stylesheet">
+        <link href="/style/sandpiper.css" rel="stylesheet">
+        
+        
+    </head>
+    <body>
+        
+        <div class="container">
+        
+            <header>
+                <h1>Sandpiper <small>Programming Language</small></h1>
+            </header>
+            
+            <nav>
+                <a href="/"><div>Home</div></a>
+                <a href="/documentation/description" class="selected"><div>Language Description</div></a>
+                <!-- <a href="/documentation/reference"><div>Language Reference</div></a> -->
+                <a href="/documentation/reference/library"><div>Library Reference</div></a>
+                <a href="/pipers"><div>Makers of Sandpiper</div></a>
+            </nav>
+            
+            
+            <main>
+                <nav>
+                    <a href="/documentation/description/objects-and-methods.html">1. Objects and Methods</a>
+                    <a href="/documentation/description">Table of Contents</a>
+                </nav>
+                
+                <article>
+                    <h3>2. Variables and Functions</h3>
+                    
+                    <article><h4 id="variables">Variables</h4>
+
+<p>We ended the previous chapter with this example demonstrating nested expressions:</p>
+
+<pre><code>Stdout: puts (“hoge, fuga, piyo”: replace “, ” with “ ”) !
+</code></pre>
+
+<p>Relying on nested expressions, in more complex programs, pretty quickly turns into a lousy, unreadable mess. To avoid doing that, we can assign nested values to variables using the <code>=&gt;</code> operator. So we can re-write the above example:</p>
+
+<pre><code>de-commafied-list =&gt; “hoge, fuga, piyo”: replace “, ” with “ ”.
+Stdout: puts de-commafied-list !
+</code></pre>
+
+<p>If you’re used to C-like languages, you should notice three important things:</p>
+
+<ol>
+<li>Variable names can contain hyphens. In fact, they can contain just about any character except whitespace, brackets, or other characters that could be mis-interpreted for other syntactic features.</li>
+<li>Declarations end in a period. All “code body” in Sandpiper (like this program scope) consists of declarations, and each declaration ends in a period. <strong>But</strong> not all declarations need to end in a period. In this case, the <code>puts/!</code> call is relieved of its period because the last particle of the method incantation (<code>!</code>) ends in an exclamation mark. You <em>could</em> still write it <code>Stdout: puts de-commafied-list !.</code> but that would be silly.</li>
+<li>Variables are assigned exactly once—they are immutable. You can’t change them, and it doesn’t cause any problems for well-structured code. The first time I encountered a language with immutable variables, my hackles went up, and I said “How can you possibly represent a state changing over time with immutable variables!?” Actually, I didn’t say it so articulately, but Sandpiper has a stellar solution in the form of Pipes, which we’ll discuss later.</li>
+</ol>
+
+<p>Variables in Sandpiper are strongly typed; but since the types are handled automatically in this case, we’ll ignore this detail until later chapters.</p>
+
+<p>We use the <code>=&gt;</code> operator to assign variables because (a) it contains an equals sign that’s traditionally used for assignment, and (b) it looks like a forward-pointing arrow. In traditional assignment, values are taken from the right side, and slid into the variable on the left as though it were a slot. Some languages even use a left-pointing arrow to represent this. In Sandpiper, it’s the opposite: A variable is just a name that refers to a value; in fact, you could say that the variable simply points to the evaluated result of the expression on the right-hand side of the <code>=&gt;</code>. <strong>In short, it’s a left-to-right <em>association,</em> not a right-to-left <em>storage</em>.</strong></p>
+</article>
+
+
+
+<article><h4 id="function_literals">Function Literals</h4>
+
+<p>Functions are declarations inside [square brackets]. Let’s define one.</p>
+
+<pre><code>[ 2 ]
+</code></pre>
+
+<p>That’s a function that always returns the number 2. Functions are objects, so we can refer to them by variable:</p>
+
+<pre><code>two =&gt; [ 2 ].
+</code></pre>
+
+<p>OK, so that’s a boring function. We can give a function parameters</p>
+
+<pre><code>lower-back/ =&gt; [ name -&gt; name: downcase: reversed ].
+: lower-back “Delano”.  ;; Calls the function and evaluates to “onaled”.
+                        ;; (Text after a semicolon forms a comment, by the way.)
+</code></pre>
+
+<p>In this case, <code>name</code> is a parameter, and the <code>-&gt;</code> symbol separates its declaration from the function body. Some cool things are going on here! First, we’re calling a local function by using the same method call operator we’ve been using, <code>:</code>, with no receiver on the left. By putting a slash in the variable name <code>lower-back/</code>, we tell the compiler where the argument goes, which allows us to call the function in the same way we’d call a method. There are other ways to call functions, which we’ll see later.</p>
+
+<p>And the second cool thing is the function body (e.g. <code>2</code> or <code>name: downcase: reversed</code>) forms the return value of the function, without silly <code>return</code> keywords! So what happens if we put multiple declarations in a function?</p>
+
+<pre><code>lower-back/ =&gt; [ name -&gt;
+    lower-name =&gt; name: downcase.
+    lower-name: reversed.
+].
+: lower-back “Delano”.
+</code></pre>
+
+<p>This function does <em>exactly</em> the same thing. <strong>In fact, it’s the <em>last</em> declaration in a function body that forms the return value.</strong> You may notice that we omitted the period from those first single-declaration functions; the last declaration in a scope can have its period left off.</p>
+
+<p>A function can take more than one parameter; each parameter is given before the <code>-&gt;</code>, with spaces separating them.</p>
+
+<pre><code>subtract/from/ =&gt; [ subtrahend minuend -&gt;
+    minuend: - subtrahend
+].
+: subtract 17 from 2.  ;; evaluates to -15.
+</code></pre>
+
+<p>A function can also refer to variables in its enclosing scopes, in effect becoming a closure:</p>
+
+<pre><code>two =&gt; 2.
+subtract/from-two =&gt; [ subtrahend -&gt;  two: - subtrahend ].
+: subtract 17 from-two.  ;; evaluates to -15.
+</code></pre>
+
+<p>One would expect as much from a language.</p>
+</article>
+
+
+
+<article><h4 id="functions_in_boolean_logic">Functions in Boolean Logic</h4>
+
+<p>Before going further, we need to step over to something a little more rudimentary: Boolean logic. Say we have a couple of variables,</p>
+
+<pre><code>hoge =&gt; (something).
+fuga =&gt; (something else).
+</code></pre>
+
+<p>We might naturally want to see if they’re equal. Simple enough:</p>
+
+<pre><code>hoge: == fuga
+</code></pre>
+
+<p>literally just calling the <code>==</code> method on <em>hoge</em> with <em>fuga</em> as the argument. This returns a boolean, either the singleton <code>True</code> or the singleton <code>False</code>. These are just objects; in fact, members of <code>TrueClass</code> and <code>FalseClass</code>, respectively. And these offer a number of logic-oriented methods, such as <code>if-true/if-false/</code>. This method takes two functions, and finds the value of one of them (ignoring the other), depending on the receiver. The return value of the <code>if-true/if-false/</code> method itself is that value of the chosen function.</p>
+
+<pre><code>hoge: == fuga: if-true [ hoge: * fuga ]  if-false [ hoge: - fuga ]
+</code></pre>
+
+<p>Here we have two method calls chained together: <code>==/</code> and <code>if-true/if-false/</code>. The equality test is done first, and so the <code>if-true/if-false/</code> method is called on either <code>True</code> or <code>False</code>. So, if <em>hoge</em> and <em>fuga</em> are equal, the whole expression is equal to the product of the two; if not, it&#8217;s the difference of the two.</p>
+
+<p>Conceptually, the <code>if-true/if-false/</code> method is implemented by default to evaluate the first (true) function and return its value, and is overridden in <code>False</code> and <code>Nil</code> to evaluate and return the second (false) function. (The compiler reserves the right to cheat a bit about this in practice, for the sake of speed.) This is essentially how it works in Smalltalk as well. It also means that all objects except for <code>Nil</code> and <code>False</code>, such as <code>0</code>, <code>“”</code>, and <code>[ False ]</code>, are all logically truthy.</p>
+</article>
+
+
+
+<article><h4 id="terse_function_parameters">Terse Function Parameters</h4>
+
+<p>It’s pretty common to see a small, inline function like</p>
+
+<pre><code>[ doge -&gt; doge: is-happy? ]
+</code></pre>
+
+<p>Notice how the parameter name <code>doge</code> gets repeated immediately? As a helpful shortcut, you can use the percent symbol <code>%</code> to refer to parameters, as in <code>%0</code>, <code>%1</code>, <code>%2</code>, etc., as many as you need.</p>
+
+<pre><code>[ %0: is-happy? ]  ;; equivalent
+</code></pre>
+
+<p>For further simplicity when you have only one parameter, just <code>%</code> is interchangeable for <code>%0</code>.</p>
+
+<pre><code>[ %: is-happy? ]  ;; also equivalent
+</code></pre>
+
+<p>Terse parameters are only available for the immediate function where they appear. For instance, this is invalid:</p>
+
+<pre><code>[
+    %: is-happy?:  if-true [ %: name: append “ is wagging” ]
+                  if-false [ %: name: append “ is sullen” ].
+]
+</code></pre>
+
+<p>The <code>%</code> at the beginning of the outer function is valid, assuming the caller passes in a doge. But the <code>%</code>s <em>inside</em> the if/else clauses refer to arguments passed into those inner functions themselves, by the <code>if-true/if-false/</code> method, not the doge from the outer function—and since the <code>if</code> doesn&#8217;t pass in any arguments, the inner <code>%</code>s refer to nothing.</p>
+</article>
+
+
+
+<article><h4 id="a_note_on_typography">A Note on Typography</h4>
+
+<p>If you’re using a contemporary browser, you may be wondering how to type the <code>-&gt;</code> and <code>=&gt;</code> characters in your code. These are, in fact, just a hyphen or equals sign followed by a greater-than. On this site, we use the <a href="https://github.com/i-tu/Hasklig">Hasklig</a> typeface for code, which joins these character pairs into single, double-width glyphs. It’s rather nifty, and makes Sandpiper code more beautiful to read. You should try it out for your own editor!</p>
+</article>
+                    
+                    
+                </article>
+                
+            </main>
+            
+            
+            
+            <article id="sosumi">
+                <p>Copyright © 2015, The Maintainers of the Sandpiper Language, <a href="/pipers">as listed here</a>. Sandpiper is <a href="/LICENSE.txt">MIT Licensed</a>.</p>
+            </article>
+            
+            
+        
+        </div>
+        
+    </body>
+</html>
