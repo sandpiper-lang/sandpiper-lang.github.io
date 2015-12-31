@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        
+        <title>Language Description: 2. Declarations, Variables, and Method Call Styles (The Sandpiper Programming Language)</title>
+        
+        <link href="/typography/typography.css" rel="stylesheet">
+        <link href="/style/sandpiper.css" rel="stylesheet">
+        
+        
+    </head>
+    <body>
+        
+        <div class="container">
+        
+            <header>
+                <h1>Sandpiper <small>Programming Language</small></h1>
+            </header>
+            
+            <nav>
+                <a href="/"><div>Home</div></a>
+                <a href="/documentation/description" class="selected"><div>Language Description</div></a>
+                <!-- <a href="/documentation/reference"><div>Language Reference</div></a> -->
+                <a href="/documentation/reference/library"><div>Library Reference</div></a>
+                <a href="/pipers"><div>Makers of Sandpiper</div></a>
+            </nav>
+            
+            
+            <main>
+              <nav>
+                <a href="/documentation/description/objects-and-methods.html">1. Objects and Methods</a>
+                    <a href="/documentation/description">Table of Contents</a>
+                    <a href="/documentation/description/types-classes.html">3. Types and Classes</a>
+              </nav>
+
+              <article>
+                <h3>2. Declarations, Variables, and Method Call Styles</h3>
+                
+<article>
+
+<h4>Declarations, Variables, and Method Chaining</h4>
+<p>Variables in Sandpiper may be set exactly once, making them immutable. You use the hash-rocket <code>=&gt;</code> to assign them a value.</p>
+<pre><code>doge-body =&gt; my-doge: rest
+</code></pre>
+<p>Traditional variable assignment is like putting a value into a bucket. In sandpiper, it’s a declaration—a declaration that some name (<code>doge-body</code>) is equivalent to the value of some expression (<code>my-doge: rest</code>).</p>
+<p>To declare that variable without assigning anything to it yet, use the syntax</p>
+<pre><code>there-is doge-body.
+</code></pre>
+<p>This is a kind of “keyword declaration,” which we’ll discuss later. Assignment-free variable declarations won’t be immediately useful, but they’re important to know about.</p>
+<p>As an example, we can re-do our earlier string replace by splitting it into pieces, and joining them back together. One way to accomplish this is through a pair of declarations:</p>
+<pre><code>pieces =&gt; “hoge, fuga, piyo”: split “, ”.
+replaced =&gt; pieces: join “ ”.
+</code></pre>
+<p>Each declaration ends in a period—this is necessary when you have more than one declaration in a row.</p>
+<p>We can simplify this code by chaining the method calls together:</p>
+<pre><code>replaced =&gt; “hoge, fuga, piyo”: split “, ”: join “ ”.
+</code></pre>
+<h5>Implicit Method Calls</h5>
+<p>You can omit the colon after the receiver in a method call.</p>
+<pre><code>“foo”: replace “o” with “!”.
+“foo” replace “o” with “!”.  ;; same
+
+5: * 3.
+5 * 3.  ;; same
+</code></pre>
+<p>Doing so comes with a number of intrinsic limitations—particularly, you can only omit the colon where the syntax doesn’t become ambiguous; and call chaining is not possible. For instance, <code>5 * 3 - 10</code> won’t give you 5. It’ll look for the <code>*()-()</code> method, and not be able to find it. Any of the following <em>will</em> work, however:</p>
+<pre><code>5: * 3: - 10.  ;; explicit
+5 * 3: - 10.   ;; the first method call in a chain can be implicit
+(5 * 3) - 10.  ;; otherwise disambiguated
+</code></pre>
+<p>It should be clear, at this point, why the simple arithmetic operators don’t have precedence over one another. They’re chained linearly, left-to-right, like any other methods.</p>
+<h4>A Brief Introduction to Types</h4>
+<p>So far, we’ve been writing ducktyped code, that looks and feels like ducktyping in Ruby, Python, Smalltalk, etc. In fact, all Sandpiper code is strongly typed, but it allows you to completely ignore type information in most circumstances, if it’s not helpful for your code. We’ll just briefly touch on Types here.</p>
+<p>A type is a set of methods, and can be a class of objects. For instance, the literal <code>“doge”</code> is an object of type <code>Text</code>, which tells you how you can interact with it—what methods you can call on it.</p>
+<p>In a variable declaration, the variable’s “declaration point,” to this point, has just been the variable’s name. It can also contain the name of the variable’s type in parentheses after the name. For instance, you can re-write</p>
+<pre><code>there-is doge.
+doge-body =&gt; doge: rest.
+</code></pre>
+<p>as</p>
+<pre><code>there-is doge (List).
+doge-body (List) =&gt; doge: rest.
+</code></pre>
+<p>The value <code>Nil</code> cannot be the value of a variable with a specific, simple type like <code>List</code>. <code>Nil</code> has its own class, <code>NilClass</code>, which doesn’t inherit from <code>Object</code>. To allow such a variable to refer to Nil as well, you can suffix it with a question mark, to make it Optional: <code>List?</code>. (While you can’t use an <code>Object</code>-type variable to refer to Nil, you <em>can</em> use one typed <code>Any</code>.)</p>
+<p>The compiler will infer the types of variables as much as possible. Specifying them explicitly tells Sandpiper to make sure that your variables hold the exact type you’re expecting when the program runs. To the extent that it can do this at compile time, the compiler will make sure all your types line up, and warn you when they don’t. When it can’t do this, it will insert runtime checks. Specifying a variable’s type isn’t usually useful at inline declarations, but can be essential when declaring new classes.</p>
+</article>
+
+</article>
+
+            </main>
+            
+            
+            
+            <article id="sosumi">
+                <p>Copyright © 2015, The Maintainers of the Sandpiper Language, <a href="/pipers">as listed here</a>. Sandpiper is <a href="/LICENSE.txt">MIT Licensed</a>.</p>
+            </article>
+            
+            
+        
+        </div>
+        
+    </body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        
+        <title>Language Description: 5. Recursion and Early Returns (The Sandpiper Programming Language)</title>
+        
+        <link href="/typography/typography.css" rel="stylesheet">
+        <link href="/style/sandpiper.css" rel="stylesheet">
+        
+        
+    </head>
+    <body>
+        
+        <div class="container">
+        
+            <header>
+                <h1>Sandpiper <small>Programming Language</small></h1>
+            </header>
+            
+            <nav>
+                <a href="/"><div>Home</div></a>
+                <a href="/documentation/description" class="selected"><div>Language Description</div></a>
+                <!-- <a href="/documentation/reference"><div>Language Reference</div></a> -->
+                <a href="/documentation/reference/library"><div>Library Reference</div></a>
+                <a href="/pipers"><div>Makers of Sandpiper</div></a>
+            </nav>
+            
+            
+            <main>
+              <nav>
+                <a href="/documentation/description/functions.html">4. Unbound Functions</a>
+                    <a href="/documentation/description">Table of Contents</a>
+                    <a href="/documentation/description/literals.html">6. Literals</a>
+                </nav>
+                
+                <article>
+                    <h3>5. Recursion and Early Returns</h3>
+                    
+                    <article>
+
+
+                      <h4>Direct Recursive Calls</h4>
+<p>Within a bound function (a method), the variable <code>self</code> always refers to the object the function is bound to. Some languages use <code>this</code> for that purpose. Sandpiper also has a keyword <code>this</code>, but it refers to the function in which it appears. The most common usage is to perform recursive calls:</p>
+<pre><code>;; calls itself with ever-larger arguments
+infinity =&gt; [ n -&gt; (n inc) ::this ]
+</code></pre>
+<p>We can make a standard recursive Fibonacci generator without <code>this</code></p>
+<pre><code>fibonacci =&gt; [ n -&gt;
+    n: &lt;= 1:
+        if-true  [ n ]
+        if-false [
+            ((n - 1) ::fibonacci) + ((n - 2) ::fibonacci) ] ].
+</code></pre>
+<p>but the function has to be named in order for it to work. We’d like to use <code>this</code> instead, to make it more portable. A good attempt might be</p>
+<pre><code>fibonacci =&gt; [ n -&gt;
+    n: &lt;= 1:
+        if-true  [ n ]
+        if-false [
+            ((n - 1) ::this) + ((n - 2) ::this) ] ].
+</code></pre>
+<p>but there’s a big problem: <code>this</code> refers to the body of the <code>if-false</code> clause, which is not what we want to recurse into. (And, since that function doesn’t take any arguments, and we’re trying to pass a number in, we’ll immediately get an error.) Let’s start building this again, bit by bit.</p>
+<p>A Fibonacci number is the sum of the two prior Fibonacci numbers in the sequence. This is easy to represent:</p>
+<pre><code>fibonacci =&gt; [ n -&gt;
+    ((n - 1) ::this) + ((n - 2) ::this) ].
+</code></pre>
+<p>We’re calling the right function with <code>this</code>, because its scope is still the outer function. We’ll leave this as the usual case, the “happy path,” but add an additional early return if <code>n</code> is at a base case:</p>
+<pre><code>fibonacci =&gt; [ n -&gt;
+    ^^ n: &lt;= 1:
+        if-true [ ^n ].
+    
+    ((n - 1) ::this) + ((n - 2) ::this).
+
+].
+</code></pre>
+<p>There’s some new syntax here, the caret and double caret. We call them the “Return-Throw” <code>^</code> and “Catch-Bounce-Return” <code>^^</code> operators. The return-throw takes the expression that comes after it (in this case <code>n</code>) and immediately throws it up the call stack. It’s similar to throwing exceptions in other languages, but it takes any object, and is meant primarily for early returns, instead of error conditions. There is no “try-catch block” mechanism for handling these throws in Sandpiper; instead, we use the catch-bounce-return operator <code>^^</code>. It prefixes a declaration, and catches any early return that gets thrown from inside anywhere in that declaration. Instead of catching it for the surrounding code to use, however, it returns the thrown value one last time out of the function it immediately appears in (out of <code>this</code> where it appears).</p>
+<p>Our function does what it’s supposed to at this point, but it’s inefficient. As a final touch, we should ask the compiler to memoize this function for us, so that the Fibonacci numbers at certain indices <code>n</code> are remembered across branches of recursion. We’ll do that by putting the letter ‘m’ right after the closing bracket. We also want to make sure negative numbers are not given by making <code>n</code> an Unsigned integer:</p>
+<pre><code>fibonacci =&gt; [ n (Unsigned) -&gt;
+    ^^ n: &lt;= 1:
+        if-true [ ^n ].
+    
+    ((n - 1) ::this) + ((n - 2) ::this).
+
+]m.
+</code></pre>
+<p>There must be no space between the bracket and the ‘m.’</p>
+<h4>A brief note on boolean logic</h4>
+<p>The primary mechanism for logical branching is the <code>if-true()if-false()</code> method that’s available on every object. It takes two functions as arguments, and is implemented by default to return the value of the first function, the <code>if-true</code> function. The method is overridden by <code>Nil</code> and <code>False</code> to return the value of the second function instead. Thus, all objects except <code>Nil</code> and <code>False</code> are logically truthy.</p>
+<p>There are a number of similar methods like the solo <code>if-true()</code> we used above.</p>
+
+
+</article>
+                    
+                    
+                </article>
+                
+            </main>
+            
+            
+            
+            <article id="sosumi">
+                <p>Copyright © 2015, The Maintainers of the Sandpiper Language, <a href="/pipers">as listed here</a>. Sandpiper is <a href="/LICENSE.txt">MIT Licensed</a>.</p>
+            </article>
+            
+            
+        
+        </div>
+        
+    </body>
+</html>

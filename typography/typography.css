@@ -40,6 +40,27 @@ pre {
     border-radius: 0.2em;
 }
 
+/* .no-lig outside of code samples is not supported on most browsers as of this writing. */
+
+code.no-lig, pre.no-lig, samp.no-lig {
+    /* phor ye olde browsarse */
+    font-family: 'Source Code Pro', Menlo, Inconsolata, Courier, sans-serif;
+}
+
+/* In better browsers, reinstate hasklig and turn off ligatures. */
+@supports (font-variant-ligatures: none) {
+    .no-lig {
+        font-variant-ligatures: none;
+    }
+    
+    code.no-lig, pre.no-lig, samp.no-lig {
+        font-family: hasklig, 'Source Code Pro', Menlo, Inconsolata, sans-serif;
+        font-variant-ligatures: none;
+    }
+    
+}
+
+
 
 
 

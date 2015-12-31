@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        
+        <title>Language Description: 4. Unbound Functions (The Sandpiper Programming Language)</title>
+        
+        <link href="/typography/typography.css" rel="stylesheet">
+        <link href="/style/sandpiper.css" rel="stylesheet">
+        
+        
+    </head>
+    <body>
+        
+        <div class="container">
+        
+            <header>
+                <h1>Sandpiper <small>Programming Language</small></h1>
+            </header>
+            
+            <nav>
+                <a href="/"><div>Home</div></a>
+                <a href="/documentation/description" class="selected"><div>Language Description</div></a>
+                <!-- <a href="/documentation/reference"><div>Language Reference</div></a> -->
+                <a href="/documentation/reference/library"><div>Library Reference</div></a>
+                <a href="/pipers"><div>Makers of Sandpiper</div></a>
+            </nav>
+            
+            
+            <main>
+              <nav>
+                <a href="/documentation/description/types-classes.html">3. Types and Classes</a>
+                    <a href="/documentation/description">Table of Contents</a>
+                    <a href="/documentation/description/recursion-early-returns.html">5. Recursion and Early Returns</a>
+                </nav>
+                
+                <article>
+                    <h3>4. Unbound Functions</h3>
+                    
+                    <article>
+
+
+<p>Let’s look closer at one of those last examples from the section on type inheritance: <code>doge: filter [ &amp;: ends-with “er” ? ]</code>. You’ll recall that <code>doge</code> is defined as</p>
+<pre><code>doge =&gt; LinkedList: with-element “wagger” next Nil:
+    push “rump”:
+    push “belly”:
+    push “lungs”:
+    push “shoulders”:
+    push “neck”:
+    push “head”:
+    push “sniffer”.
+</code></pre>
+<p>If you’ve dealt with similar constructs in other languages (in Ruby, it’s <em>very</em> similar: <code>doge.select {|part| part.end_with? &quot;er&quot; }</code>) you should suspect that the <code>[...]</code> expression is a function of some sort.</p>
+<p>In Sandpiper, square brackets denote a function literal; at runtime, when it comes into scope, it forms a first-class function—which, of course, is also a first-class object. We’ve seen functions before—types take functions in their definitions, and refer to them by name in their own method namespaces. But unbound functions like that in the <code>filter</code> example are common and quite flexible.</p>
+<p>A function normally takes an argument or more, and returns one value. Here’s a function that takes a number:</p>
+<pre><code>;; adds one, returns a string representation
+[ omnom -&gt; omnom: inc: to-s ]
+</code></pre>
+<p>The terms before the pipe rocket <code>-&gt;</code> operator are the parameters to the function. Multiple arguments are separated by spaces (commas are never used to separate items in Sandpiper):</p>
+<pre><code>;; true if the index is less than the item's i-value
+[ item  index -&gt;
+    index &lt; (item at :i-val) ]
+</code></pre>
+<p>Functions without parameters omit the pipe rocket:</p>
+<pre><code>[ Random: from (1 .. 10) ]
+</code></pre>
+<p>For brevity, functions automatically have arguments named with ampersands, starting from <code>&amp;0</code>, through <code>&amp;1</code>, <code>&amp;2</code>, <code>&amp;3</code>, etc. If your function uses these, it needn’t otherwise name its parameters. Additionally, a lone ampersand <code>&amp;</code> is equivalent to <code>&amp;0</code>. The following functions are all identical:</p>
+<pre><code>[ omnom -&gt; omnom: inc: to-s ]
+[ &amp;0: inc: to-s ]
+[ &amp;: inc: to-s ]
+</code></pre>
+<p>The part of the function after the rocket is the “function body,” which consists of one or more declarations. The final declaration’s value is the function’s return value. So far, the examples in this section have all been single-declaration functions. As before, we need to end declarations with a period if we have more than one in a scope.</p>
+<pre><code>[ upper-limit -&gt;
+    real-limit =&gt; upper-limit: sqrt.
+    Random: from (0 .. real-limit).  ]
+</code></pre>
+<p>In certain circumstances, you may want to make absolutely sure your little function is accepting the type of arguments you expect. For instance, we want to make sure in this function that we’re getting a number before we try to take its square root:</p>
+<pre><code>[ upper-limit (Number) -&gt;
+    real-limit =&gt; upper-limit: sqrt.
+    Random: from (0 .. real-limit).  ]
+</code></pre>
+<p>Multiple-argument functions can also have type specs:</p>
+<pre><code>[ value (Int)  period (Int)  -&gt; value: mod period ]
+</code></pre>
+<p>It’s entirely up to you when you specify the argument types in a small function. In small scripts especially, you needn’t burden yourself with specifying them. Or, if a lot of your code is strongly typed already, the types may be perfectly inferred already, and specifying them again would be redundant.</p>
+<p>Being objects, you can assign functions to variables.</p>
+<pre><code>humaniser =&gt; [ &amp;: inc: to-s ]
+</code></pre>
+<p>A function captures the state of variables surrounding it in its lexical scope, at the time it’s created; thus, multiple copies of the “same function” may actually be distinct in state, if surrounding variables they use are different.</p>
+<p>There are two different ways to call an unbound function, depending on how you want to use it and how it’s named. Let’s look at the two faces of <code>max</code>: It’s a standard function that’s always available, but it has two different names. One name is <code>max-of(){and()}</code>, and the other is just <code>max</code>. The first form uses curly brackets to indicate that the <code>and()</code> clause of the name may repeat (this is available for method names as well). Since it has particles and argument placeholders, we can call it just like any other method, using the single colon.</p>
+<pre><code>: max-of 5 and 3   ;; 5
+: max-of 5 and 3 and 7 and -10   ;; 7
+</code></pre>
+<p>The official name of the colon in this usage is the “Function Incantation Call Operator.” When there is only an empty expression to its left, it assumes the incantation names an unbound function, instead of a method. (Remember that the operator requires some amount of whitespace to its right—<code>:max-of</code> is interpreted as a symbol!)</p>
+<p>To call a function this way, the variable name that refers to it must be formatted in an incantation-compatible way (with parentheses for arguments) that matches the parameters of the function. Sometimes this isn’t the most convenient, or you need to call a function that’s named too generically. In these cases we can use the “Direct Function Call Operator,” or <code>::</code>.</p>
+<p>The <code>max</code> variation is designed to be called this way.</p>
+<pre><code>5  3  ::max
+5  3  7  -10  ::max
+</code></pre>
+<p>Its arguments are space-separated, and come to the left. This is unusual for most languages. One of Sandpiper’s guiding philosophies is that data should flow from left to right, through the machinery of your code. As such, the arguments flow from the left, through the <code>max</code> function to the right.</p>
+<p>There is actually a third way to call a function, though it is less of an intrinsic language feature. Functions are objects, and they have methods. One of those methods is <code>apply()</code>, that takes a List of arguments. This is how we’d use it with the <code>max</code> function:</p>
+<pre><code>max: apply { 5  3  7  -10 }
+</code></pre>
+<p>Or, if we have an arbitrary list called <code>args</code>,</p>
+<pre><code>[ args -&gt; max: apply args ]
+</code></pre>
+<p>Functions that have side effects should be called using the sister method <code>apply()!</code>:</p>
+<pre><code>[ args -&gt; max: apply args ! ]
+</code></pre>
+
+
+                    </article>
+                    
+                    
+                </article>
+                
+            </main>
+            
+            
+            
+            <article id="sosumi">
+                <p>Copyright © 2015, The Maintainers of the Sandpiper Language, <a href="/pipers">as listed here</a>. Sandpiper is <a href="/LICENSE.txt">MIT Licensed</a>.</p>
+            </article>
+            
+            
+        
+        </div>
+        
+    </body>
+</html>

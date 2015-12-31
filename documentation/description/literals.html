@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+        
+        <title>Language Description: 6. Literals (The Sandpiper Programming Language)</title>
+        
+        <link href="/typography/typography.css" rel="stylesheet">
+        <link href="/style/sandpiper.css" rel="stylesheet">
+        
+        
+    </head>
+    <body>
+        
+        <div class="container">
+        
+            <header>
+                <h1>Sandpiper <small>Programming Language</small></h1>
+            </header>
+            
+            <nav>
+                <a href="/"><div>Home</div></a>
+                <a href="/documentation/description" class="selected"><div>Language Description</div></a>
+                <!-- <a href="/documentation/reference"><div>Language Reference</div></a> -->
+                <a href="/documentation/reference/library"><div>Library Reference</div></a>
+                <a href="/pipers"><div>Makers of Sandpiper</div></a>
+            </nav>
+            
+            
+            <main>
+              <nav>
+                <a href="/documentation/description/recursion-early-returns.html">5. Recursion and Early Returns</a>
+                    <a href="/documentation/description">Table of Contents</a>
+                    <!--<a href="/documentation/description/"></a>-->
+                </nav>
+                
+                <article>
+                    <h3>6. Literals</h3>
+                    
+                    <article>
+
+
+                      <h4>Array and Dictionary Literals</h4>
+<p>Array and Dictionary Literals are enclosed in <code>{</code>curly brackets<code>}</code>.</p>
+<p>In Arrays, elements are separated by whitespace: <code>{ “fish” “dog” “fankhauser” }</code>. Dictionaries consist of key-value pairs, separated also by whitespace. A rocket, <code>-&gt;</code> or <code>=&gt;</code>, pairs the key to its value. The pipe rocket <code>-&gt;</code> associates by value:</p>
+<pre><code>{ “food” -&gt; “fish”  “pet” -&gt; “dog”  “hooman” -&gt; “fankhauser” }
+</code></pre>
+<p>or</p>
+<pre><code>fid =&gt; “food”.  pid =&gt; “pet”.  hid =&gt; “hooman”.
+{ fid -&gt; “fish”  pid -&gt; “dog”  hid -&gt; “fankhauser” }
+</code></pre>
+<p>The terms <code>fid</code>, <code>pid</code>, and <code>hid</code> are evaluated; their string values <code>“food”</code>, <code>“pet”</code>, and <code>“hooman”</code> are used as keys in the dictionary. It’s quite common to use symbols instead of strings in dictionaries, though:</p>
+<pre><code>{ :food -&gt; “fish”  :pet -&gt; “dog”  :hooman -&gt; “fankhauser” }
+</code></pre>
+<p>If you’re doing this, you can use the hash-rocket instead. See if you can spot what’s going on here:</p>
+<pre><code>{ food =&gt; “fish”  pet =&gt; “dog”  hooman =&gt; “fankhauser” }
+</code></pre>
+<p>Where the pipe-rocket <code>-&gt;</code> associates by value—it <em>evaluates</em> what’s on its left-hand side—the hash-rocket <code>=&gt;</code> associates by symbol. In a dictionary, it takes the <em>bare word</em> to its left and interprets it as a symbol. This matches the behavior of the hash-rocket for variable declarations inside a function: It takes the bare word to the left as a variable name for the association.</p>
+
+
+                    </article>
+                    
+                    
+                </article>
+                
+            </main>
+            
+            
+            
+            <article id="sosumi">
+                <p>Copyright © 2015, The Maintainers of the Sandpiper Language, <a href="/pipers">as listed here</a>. Sandpiper is <a href="/LICENSE.txt">MIT Licensed</a>.</p>
+            </article>
+            
+            
+        
+        </div>
+        
+    </body>
+</html>
