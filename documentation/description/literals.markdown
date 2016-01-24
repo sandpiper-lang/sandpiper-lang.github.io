@@ -40,7 +40,7 @@ Sandpiper treats all code input as UTF-8, without exception. All unicode charact
 
 ##### Comment-Block Multiline Texts
 
-If you want to include multiline text in your code using the above kind of quotation marks, the text is likely to interfere with your code's indentation, or vice-versa. You can use comment-block text. This is a fun, strange hybrid of comments and text literals. As you may have gleaned from the rest of this guide, comments are any text from a semicolon to the end of the line. Normally, comment text is just disregarded. But if the first character after the semicolon is a quotation mark, it begins a text block over subsequent comment lines. Let's look at an example. Suppose we want to print the start of the Homebrew help string:
+If you want to include multiline text in your code using the above kind of quotation marks, the text is likely to interfere with your code's indentation, or vice-versa. You can solve this by using comment-block text. This is a fun, strange hybrid of comments and text literals. As you may have gleaned from the rest of this guide, comments are any text from a semicolon to the end of the line. Normally, comment text is just disregarded. But if the first character after the semicolon is a quotation mark, it begins a text block over subsequent comment lines. Let's look at an example. Suppose we want to print the start of the Homebrew help string:
 
     Example usage:
       brew [info | home | options ] [FORMULA...]
