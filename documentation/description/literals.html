@@ -71,29 +71,31 @@
 </code></pre>
 <h5>Formats and Special Characters</h5>
 <p>Sandpiper treats all code input as UTF-8, without exception. All unicode characters are allowed in text literals, so long as they aren’t syntactically meaningful (and those that are, have escapes). There are no “escape sequences” for special characters like NUL bytes and newlines. Except for the examples above, to put a character in a string, just put it in the string. No fuss.</p>
-<h5>Indent-Eased Multiline Texts</h5>
-<p>If you want to include multiline text in your code using the above kind of quotation marks, the text is likely to interfere with your code’s indentation, or vice-versa. You can use <code>&quot;&quot;&quot;</code>triple-quoted<code>&quot;&quot;&quot;</code> text, which ignores some leading whitespace on each line. For instance, instead of writing</p>
+<h5>Comment-Block Multiline Texts</h5>
+<p>If you want to include multiline text in your code using the above kind of quotation marks, the text is likely to interfere with your code’s indentation, or vice-versa. You can use comment-block text. This is a fun, strange hybrid of comments and text literals. As you may have gleaned from the rest of this guide, comments are any text from a semicolon to the end of the line. Normally, comment text is just disregarded. But if the first character after the semicolon is a quotation mark, it begins a text block over subsequent comment lines. Let’s look at an example. Suppose we want to print the start of the Homebrew help string:</p>
+<pre><code>Example usage:
+  brew [info | home | options ] [FORMULA...]
+  brew install FORMULA...
+</code></pre>
+<p>Instead of writing</p>
 <pre><code>    Stdout: puts &quot;Example usage:
   brew [info | home | options ] [FORMULA...]
   brew install FORMULA...&quot;
 </code></pre>
-<p>you can use triple quotes to make the text block more clear:</p>
-<pre><code>    Stdout: puts &quot;&quot;&quot;Example usage:
-                      brew [info | home | options ] [FORMULA...]
-                      brew install FORMULA...&quot;&quot;&quot;
+<p>you can use comment-block text to make the context more clear:</p>
+<pre><code>    Stdout: puts ;&quot;Example usage:
+                 ;   brew [info | home | options ] [FORMULA...]
+                 ;   brew install FORMULA...&quot;
 </code></pre>
-<p>All the whitespace up to the column where the third quote mark ends is trimmed off. If we were to depict the slice mark using barchars:</p>
-<pre><code>    Stdout: puts &quot;&quot;&quot;│Example usage:
-                    │  brew [info | home | options ] [FORMULA...]
-                    │  brew install FORMULA...&quot;&quot;&quot;
-</code></pre>
+<p>All whitespace up to the semicolon, including the semicolon, is trimmed off of the string. (An additional single space after the semicolon is trimmed off, to make the alignment consistent.)</p>
+<p>It’s worth noting that, while this looks like a regular magic comment that holds a string, it is in fact not a real comment. You can’t put more code before the semicolons (that wouldn’t make sense anyhow) and after the final quote mark, you can include more non-commented code on the same line (though you ought not use anything but an end-of-declaration period).</p>
 <h5>Special Character Functions; or how, Okay, Sometimes You Actually Want Escape Characters</h5>
-<p>Sometimes you want to represent a number of invisible characters that, if included literally, would make the surrounding code gross-looking, even with indent-eased triple-quoted text. For instance, say we want to replace Windows-style line endings with Unix-style ones. This objectively sucks:</p>
+<p>Sometimes you want to represent a number of invisible characters that, if included literally, would make the surrounding code gross-looking, even with indent-eased comment-block text. For instance, say we want to replace Windows-style line endings with Unix-style ones. This code objectively sucks:</p>
 <pre><code>headers: replace &quot;
 &quot; with &quot;
 &quot;.
 </code></pre>
-<p>It replaces CRLF sequences with just LFs. And you can totally tell that by glancing at it, right? There are a number of invisible characters, defined such that you can refer to them in any scope. So instead of the ambiguous, awful example above, you could simply use</p>
+<p>It replaces CRLF sequences with just LFs. And you can totally tell that by glancing at it, right? There are a number of invisible characters, defined in variables such that you can refer to them in any scope. The relevant ones in this case are <code>Cr</code> for a carriage return and <code>Lf</code> for a line-feed. (In C, these are <code>\r</code> and <code>\n</code>, respectively.) So instead of the ambiguous, awful example above, you could simply interpolate them:</p>
 <pre><code>headers: replace &quot;(Cr)(Lf)&quot; with &quot;(Lf)&quot;.
 </code></pre>
 <h4>Array and Dictionary Literals</h4>
@@ -114,6 +116,9 @@
 <p>Where the pipe-rocket <code>-&gt;</code> associates by value—it <em>evaluates</em> what’s on its left-hand side—the hash-rocket <code>=&gt;</code> associates by symbol. In a dictionary, it takes the <em>bare word</em> to its left and interprets it as a symbol. This matches the behavior of the hash-rocket for variable declarations inside a function: It takes the bare word to the left as a variable name for the association.</p>
 <h4>Function Literals</h4>
 <p>We’ve talked about function literals before. They’re just code wrapped in <code>[</code> square brackets <code>]</code>.</p>
+
+
+
 
                     </article>
                     

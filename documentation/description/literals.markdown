@@ -38,35 +38,39 @@ Along the same lines, if you want to use a quote mark in your text, simply use a
 
 Sandpiper treats all code input as UTF-8, without exception. All unicode characters are allowed in text literals, so long as they aren't syntactically meaningful (and those that are, have escapes). There are no "escape sequences" for special characters like NUL bytes and newlines. Except for the examples above, to put a character in a string, just put it in the string. No fuss.
 
-##### Indent-Eased Multiline Texts
+##### Comment-Block Multiline Texts
 
-If you want to include multiline text in your code using the above kind of quotation marks, the text is likely to interfere with your code's indentation, or vice-versa. You can use `"""`triple-quoted`"""` text, which ignores some leading whitespace on each line. For instance, instead of writing
+If you want to include multiline text in your code using the above kind of quotation marks, the text is likely to interfere with your code's indentation, or vice-versa. You can use comment-block text. This is a fun, strange hybrid of comments and text literals. As you may have gleaned from the rest of this guide, comments are any text from a semicolon to the end of the line. Normally, comment text is just disregarded. But if the first character after the semicolon is a quotation mark, it begins a text block over subsequent comment lines. Let's look at an example. Suppose we want to print the start of the Homebrew help string:
+
+    Example usage:
+      brew [info | home | options ] [FORMULA...]
+      brew install FORMULA...
+
+Instead of writing
 
         Stdout: puts "Example usage:
       brew [info | home | options ] [FORMULA...]
       brew install FORMULA..."
 
-you can use triple quotes to make the text block more clear:
+you can use comment-block text to make the context more clear:
 
-        Stdout: puts """Example usage:
-                          brew [info | home | options ] [FORMULA...]
-                          brew install FORMULA..."""
+        Stdout: puts ;"Example usage:
+                     ;   brew [info | home | options ] [FORMULA...]
+                     ;   brew install FORMULA..."
 
-All the whitespace up to the column where the third quote mark ends is trimmed off. If we were to depict the slice mark using barchars:
+All whitespace up to the semicolon, including the semicolon, is trimmed off of the string. (An additional single space after the semicolon is trimmed off, to make the alignment consistent.)
 
-        Stdout: puts """│Example usage:
-                        │  brew [info | home | options ] [FORMULA...]
-                        │  brew install FORMULA..."""
+It's worth noting that, while this looks like a regular magic comment that holds a string, it is in fact not a real comment. You can't put more code before the semicolons (that wouldn't make sense anyhow) and after the final quote mark, you can include more non-commented code on the same line (though you ought not use anything but an end-of-declaration period).
 
 ##### Special Character Functions; or how, Okay, Sometimes You Actually Want Escape Characters
 
-Sometimes you want to represent a number of invisible characters that, if included literally, would make the surrounding code gross-looking, even with indent-eased triple-quoted text. For instance, say we want to replace Windows-style line endings with Unix-style ones. This objectively sucks:
+Sometimes you want to represent a number of invisible characters that, if included literally, would make the surrounding code gross-looking, even with indent-eased comment-block text. For instance, say we want to replace Windows-style line endings with Unix-style ones. This code objectively sucks:
 
     headers: replace "
     " with "
     ".
 
-It replaces CRLF sequences with just LFs. And you can totally tell that by glancing at it, right? There are a number of invisible characters, defined such that you can refer to them in any scope. So instead of the ambiguous, awful example above, you could simply use
+It replaces CRLF sequences with just LFs. And you can totally tell that by glancing at it, right? There are a number of invisible characters, defined in variables such that you can refer to them in any scope. The relevant ones in this case are `Cr` for a carriage return and `Lf` for a line-feed. (In C, these are `\r` and `\n`, respectively.) So instead of the ambiguous, awful example above, you could simply interpolate them:
 
     headers: replace "(Cr)(Lf)" with "(Lf)".
 
